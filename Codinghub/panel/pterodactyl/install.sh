@@ -292,6 +292,10 @@ echo ""
 line
 echo -e "${GREEN}🚀 Deployment Complete!${RESET}"
 echo -e "${WHITE}Access your panel at:${RESET} ${CYAN}https://$DOMAIN${RESET}"
+echo ""
+echo -e "${YELLOW}🔐 Default Admin Credentials${RESET}"
+echo -e "${WHITE}Username:${RESET} ${CYAN}${USERNAME:-admin}${RESET}"
+echo -e "${WHITE}Password:${RESET} ${CYAN}${PASSWORD:-admin}${RESET}"
 line
 echo -e "${GRAY}SYSTEM STATUS: STABLE | FIREWALL: ACTIVE | DATABASE: CONNECTED${RESET}"
 echo ""
