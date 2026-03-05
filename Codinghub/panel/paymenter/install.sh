@@ -55,10 +55,10 @@ fi
 
 echo -e "${GREEN}✓ Domain set to: ${WHITE}${DOMAIN}${NC}"
 echo -e ""
-read -p "Enter Username (default: admin): " USERNAME
-USERNAME=${USERNAME:-admin}
+read -p "Enter Admin Email [admin@gmail.com]: " EMAIL
+EMAIL=${EMAIL:-admin@gmail.com}
 
-read -p "Enter Password (default: admin): " PASSWORD
+read -p "Enter Admin Password [admin]: " PASSWORD
 PASSWORD=${PASSWORD:-admin}
 # --- Dependencies ---
 apt update && apt install -y curl apt-transport-https ca-certificates gnupg unzip git tar sudo lsb-release
@@ -195,15 +195,25 @@ clear
 step "Create admin user"
 cd /var/www/paymenter
 php artisan app:init
-php artisan p:user:make -n --email=admin@gmail.com --username=${USERNAME} --password=$PASSWORD --admin=1 --name-first=My --name-last=Admin
+php artisan tinker --execute="\App\Models\User::create([
+'first_name'=>'My',
+'last_name'=>'Admin',
+'email'=>'$EMAIL',
+'password'=>bcrypt('$PASSWORD'),
+'role_id'=>1,
+'is_admin'=>1
+]);"
 clear
 # ---------------- DONE ----------------
 line
 echo -e "${C_GREEN}🎉 INSTALLATION COMPLETED SUCCESSFULLY${C_RESET}"
 line
-echo -e "${C_CYAN}🌐 Panel URL    : ${C_WHITE}https://${DOMAIN}${C_RESET}"
-echo -e "${C_CYAN}🗄 DB User      : ${C_WHITE}${DB_USER}${C_RESET}"
-echo -e "${C_CYAN}🔑 DB Password  : ${C_WHITE}${DB_PASS}${C_RESET}"
+echo -e "${C_CYAN}🌐 Panel URL      : ${C_WHITE}https://${DOMAIN}${C_RESET}"
+echo -e "${C_CYAN}👤 Admin Email    : ${C_WHITE}${EMAIL}${C_RESET}"
+echo -e "${C_CYAN}🔑 Admin Password : ${C_WHITE}${PASSWORD}${C_RESET}"
 line
-echo -e "${C_PURPLE}🚀 Panel live. Control the servers.${C_RESET}"
+echo -e "${C_CYAN}🗄 DB User        : ${C_WHITE}${DB_USER}${C_RESET}"
+echo -e "${C_CYAN}🔑 DB Password    : ${C_WHITE}${DB_PASS}${C_RESET}"
+line
+echo -e "${C_PURPLE}🚀 Panel is live. Manage your servers easily.${C_RESET}"
 line
