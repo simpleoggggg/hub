@@ -55,7 +55,11 @@ fi
 
 echo -e "${GREEN}✓ Domain set to: ${WHITE}${DOMAIN}${NC}"
 echo -e ""
+read -p "Enter Username (default: admin): " USERNAME
+USERNAME=${USERNAME:-admin}
 
+read -p "Enter Password (default: admin): " PASSWORD
+PASSWORD=${PASSWORD:-admin}
 # --- Dependencies ---
 apt update && apt install -y curl apt-transport-https ca-certificates gnupg unzip git tar sudo lsb-release
 # Detect OS
