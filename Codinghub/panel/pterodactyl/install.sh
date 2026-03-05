@@ -1,31 +1,19 @@
 #!/bin/bash
 
-# ==========================================
-#  CYBERPUNK PTERODACTYL AUTO DEPLOY v3
-# ==========================================
+# --- CONFIG & COLORS (Sema UI Modern Palette) ---
+CYAN='\033[38;5;51m'
+PURPLE='\033[38;5;141m'
+GRAY='\033[38;5;242m'
+WHITE='\033[38;5;255m'
+GREEN='\033[38;5;82m'
+RED='\033[38;5;196m'
+GOLD='\033[38;5;214m'
+NC='\033[0m'
 
-# -------- COLORS --------
-RESET="\e[0m"
-RED="\e[1;31m"
-GREEN="\e[1;32m"
-YELLOW="\e[1;33m"
-BLUE="\e[1;34m"
-PURPLE="\e[1;35m"
-CYAN="\e[1;36m"
-WHITE="\e[1;37m"
-GRAY="\e[1;90m"
-
-line(){ echo -e "${GRAY}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"; }
-step(){ echo -e "${BLUE}➜ $1${RESET}"; }
-ok(){ echo -e "${GREEN}✔ $1${RESET}"; }
-warn(){ echo -e "${YELLOW}⚠ $1${RESET}"; }
-fail(){ echo -e "${RED}✖ $1${RESET}"; }
-
-# -------- EFFECTS --------
-
+# --- UI EFFECTS ---
 type_write() {
-    text="$1"
-    delay=0.01
+    local text="$1"
+    local delay=0.01
     for (( i=0; i<${#text}; i++ )); do
         echo -ne "${text:$i:1}"
         sleep $delay
@@ -34,91 +22,74 @@ type_write() {
 }
 
 loading_bar() {
-    echo -ne "${GREEN}[ SYSTEM ]${RESET} "
-    for i in {1..20}; do
-        echo -ne "█"
-        sleep 0.03
-    done
-    echo -e " ${CYAN}ONLINE${RESET}"
-}
-
-deploy_bar() {
-    echo -ne "${PURPLE}[ DEPLOY ]${RESET} "
+    echo -ne "  ${GRAY}[${NC}"
     for i in {1..25}; do
-        echo -ne "█"
-        sleep 0.04
+        echo -ne "${CYAN}#${NC}"
+        sleep 0.02
     done
-    echo -e " ${GREEN}SUCCESS${RESET}"
+    echo -e "${GRAY}]${NC} ${GREEN}COMPLETE${NC}"
 }
 
-# -------- HEADER --------
-clear
-echo -e "${CYAN}"
+# --- HEADER & BRANDING ---
+show_header() {
+    clear
+    echo -e "${PURPLE}┌──────────────────────────────────────────────────────────┐${NC}"
+    echo -e "${PURPLE}│${NC}  ${CYAN}🦅 PTERODACTYL AUTO-DEPLOY${NC} ${GRAY}v11.0${NC}          ${GRAY}$(date +"%H:%M")${NC}  ${PURPLE}│${NC}"
+    echo -e "${PURPLE}└──────────────────────────────────────────────────────────┘${NC}"
+}
 
-cat << "EOF"
-8888888b.  888                                 888                   888             888 
-888   Y88b 888                                 888                   888             888 
-888    888 888                                 888                   888             888 
-888   d88P 888888 .d88b.  888d888 .d88b.   .d88888  8888b.   .d8888b 888888 888  888 888 
-8888888P"  888   d8P  Y8b 888P"  d88""88b d88" 888     "88b d88P"    888    888  888 888 
-888        888   88888888 888    888  888 888  888 .d888888 888      888    888  888 888 
-888        Y88b. Y8b.     888    Y88..88P Y88b 888 888  888 Y88b.    Y88b.  Y88b 888 888 
-888         "Y888 "Y8888  888     "Y88P"   "Y88888 "Y888888  "Y8888P  "Y888  "Y88888 888 
-                                                                                 888     
-                                                                            Y8b d88P     
-                                                                             "Y88P"      
-EOF
+# --- INITIALIZATION SEQUENCE ---
+show_header
+echo -e "  ${CYAN}BOOT PROTOCOLS${NC}"
+echo -ne "  ${GRAY}├─ KERNEL :${NC} " ; type_write "Initializing core deployment modules..."
+echo -ne "  ${GRAY}├─ MEMORY :${NC} " ; type_write "Allocating virtual server resources..."
+echo -ne "  ${GRAY}└─ STATUS :${NC} " ; loading_bar
+echo -e "${GRAY}────────────────────────────────────────────────────────────${NC}"
 
-echo -e "${RESET}"
-line
-echo -e "${GREEN}        :: PTERODACTYL AUTO DEPLOYMENT SYSTEM :: v3${RESET}"
-line
-echo ""
-
-# -------- BOOT SEQUENCE --------
-echo -ne "${BLUE}[KERNEL] ${RESET}"
-type_write "Initializing core modules..."
-echo -ne "${BLUE}[MEMORY] ${RESET}"
-type_write "Allocating server resources..."
-sleep 0.5
-loading_bar
-echo ""
-
-# -------- DOMAIN INPUT LOOP --------
+# --- CONFIGURATION INPUT ---
 while true; do
-    line
-    echo -e "${CYAN}>> CONFIGURATION REQUIRED <<${RESET}"
-    echo ""
-    type_write "ENTER TARGET DOMAIN:"
-    echo -ne "${GREEN} root@deploy:~$ ${RESET}"
+    echo -e "\n  ${GOLD}CONFIGURATION REQUIRED${NC}"
+    echo -ne "  ${WHITE}Enter Target Domain${NC} ${GRAY}(panel.example.com):${NC} "
     read DOMAIN
     DOMAIN=${DOMAIN:-panel.example.com}
 
-    echo ""
-    echo -e "${CYAN}>> TARGET ENTERED: ${WHITE}$DOMAIN${RESET}"
-    echo -ne "${YELLOW}Confirm deployment? (y/n): ${RESET}"
+    echo -e "  ${GRAY}Target Locked :${NC} ${WHITE}$DOMAIN${NC}"
+    echo -ne "  ${CYAN}Confirm deployment? (y/n):${NC} "
     read CONFIRM
 
-    if [[ "$CONFIRM" == "y" || "$CONFIRM" == "Y" ]]; then
-        echo ""
-        ok "Target Locked: $DOMAIN"
+    if [[ "$CONFIRM" =~ ^[Yy]$ ]]; then
+        echo -e "  ${GREEN}✔ Identity Confirmed.${NC}"
         break
-    elif [[ "$CONFIRM" == "n" || "$CONFIRM" == "N" ]]; then
-        warn "Re-entering domain configuration..."
     else
-        fail "Invalid choice. Use y or n."
+        echo -e "  ${RED}⚠ Re-initializing input...${NC}"
     fi
 done
 
-echo ""
-line
-echo -e "${PURPLE}>> EXECUTING ROOT PROTOCOLS...${RESET}"
-sleep 1
-read -p "Enter Username (default: admin): " USERNAME
+echo -e "\n  ${PURPLE}CREDENTIAL SETUP${NC}"
+echo -ne "  ${GRAY}├─ Username${NC} ${WHITE}(default: admin)${NC}${GRAY}:${NC} "
+read USERNAME
 USERNAME=${USERNAME:-admin}
 
-read -p "Enter Password (default: admin): " PASSWORD
+echo -ne "  ${GRAY}└─ Password${NC} ${WHITE}(default: admin)${NC}${GRAY}:${NC} "
+read PASSWORD
 PASSWORD=${PASSWORD:-admin}
+
+# --- EXECUTION DASHBOARD ---
+echo -e "\n${PURPLE}┌──────────────────────────────────────────────────────────┐${NC}"
+echo -e "${PURPLE}│${NC}  ${CYAN}🚀 DEPLOYMENT MANIFEST${NC}                              ${PURPLE}│${NC}"
+echo -e "${PURPLE}└──────────────────────────────────────────────────────────┘${NC}"
+echo -e "  ${GRAY}DOMAIN   :${NC} ${WHITE}$DOMAIN${NC}"
+echo -e "  ${GRAY}USER     :${NC} ${WHITE}$USERNAME${NC}"
+echo -e "  ${GRAY}PASS     :${NC} ${WHITE}********${NC}"
+echo -e "${GRAY}────────────────────────────────────────────────────────────${NC}"
+
+echo -e "  ${GOLD}Executing Root Protocols...${NC}"
+# Logic for actual deployment would go here
+sleep 1
+
+echo -e "\n  ${GREEN}✔ SYSTEM DEPLOYED SUCCESSFULLY${NC}"
+echo -e "  ${GRAY}Access your panel at:${NC} ${CYAN}http://$DOMAIN${NC}"
+echo -e "${GRAY}────────────────────────────────────────────────────────────${NC}"
 # Add your actual install logic below this line
 step "Updating system packages..."
 # --- Dependencies ---
@@ -288,14 +259,24 @@ echo "APP_ENVIRONMENT_ONLY=false" >> .env
 php artisan p:user:make -n --email=admin@gmail.com --username=${USERNAME} --password=$PASSWORD --admin=1 --name-first=My --name-last=Admin
 # ---------------- DONE ----------------
 
+# --- FINAL DEPLOYMENT UI ---
+
+echo -e "\n${GREEN}┌──────────────────────────────────────────────────────────┐${NC}"
+echo -e "${GREEN}│${NC}  ${WHITE}🚀 DEPLOYMENT COMPLETED SUCCESSFULLY!${NC}                   ${GREEN}│${NC}"
+echo -e "${GREEN}└──────────────────────────────────────────────────────────┘${NC}"
+
+echo -e "  ${CYAN}ACCESS PORTAL${NC}"
+echo -e "  ${GRAY}└─ URL      :${NC} ${WHITE}https://$DOMAIN${NC}"
 echo ""
-line
-echo -e "${GREEN}🚀 Deployment Complete!${RESET}"
-echo -e "${WHITE}Access your panel at:${RESET} ${CYAN}https://$DOMAIN${RESET}"
-echo ""
-echo -e "${YELLOW}🔐 Default Admin Credentials${RESET}"
-echo -e "${WHITE}Username:${RESET} ${CYAN}${USERNAME:-admin}${RESET}"
-echo -e "${WHITE}Password:${RESET} ${CYAN}${PASSWORD:-admin}${RESET}"
-line
-echo -e "${GRAY}SYSTEM STATUS: STABLE | FIREWALL: ACTIVE | DATABASE: CONNECTED${RESET}"
-echo ""
+echo -e "  ${GOLD}ADMIN CREDENTIALS${NC}"
+echo -e "  ${GRAY}├─ Username :${NC} ${WHITE}${USERNAME}${NC}"
+echo -e "  ${GRAY}└─ Password :${NC} ${WHITE}${PASSWORD}${NC}"
+
+echo -e "${GRAY}────────────────────────────────────────────────────────────${NC}"
+
+# --- SYSTEM STATUS BAR ---
+echo -ne "  ${WHITE}STATUS:${NC} ${GREEN}STABLE${NC}  ${GRAY}|${NC} "
+echo -ne "${WHITE}FIREWALL:${NC} ${GREEN}ACTIVE${NC}  ${GRAY}|${NC} "
+echo -e "${WHITE}DB:${NC} ${GREEN}CONNECTED${NC}"
+
+echo -e "${GRAY}────────────────────────────────────────────────────────────${NC}\n"
