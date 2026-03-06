@@ -71,11 +71,11 @@ source /etc/os-release
 
 if [[ "$ID" == "ubuntu" ]]; then
     echo "Ubuntu detected"
-    bash Ubuntu
+    ash <(curl -s https://raw.githubusercontent.com/nobita329/hub/refs/heads/main/Codinghub/panel/ctrlpanel/Debian.sh)
 
 elif [[ "$ID" == "debian" ]]; then
     echo "Debian detected"
-    bash Debian
+    bash <(curl -s https://raw.githubusercontent.com/nobita329/hub/refs/heads/main/Codinghub/panel/ctrlpanel/Debian.sh)
 
 else
     echo "Unsupported OS: $ID"
