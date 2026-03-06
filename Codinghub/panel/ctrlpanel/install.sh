@@ -43,25 +43,30 @@ echo ""
 # Domain Input
 # ===============================
 
-echo -e "${YELLOW}Enter your domain (example: panel.domain.com)${NC}"
+echo -e "${YELLOW}Enter your domain or IP (example: panel.domain.com or 1.2.3.4)${NC}"
 
 while true; do
 
-read -p "➤ Domain: " DOMAIN_NAME
+read -p "➤ Domain/IP: " DOMAIN_NAME
 
 if [ -z "$DOMAIN_NAME" ]; then
-print_error "Domain cannot be empty"
+    print_error "Domain or IP cannot be empty"
 
-elif ! echo "$DOMAIN_NAME" | grep -qE '^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'; then
-print_error "Invalid domain format"
+# check domain
+elif echo "$DOMAIN_NAME" | grep -qE '^([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$'; then
+    break
+
+# check IPv4
+elif echo "$DOMAIN_NAME" | grep -qE '^([0-9]{1,3}\.){3}[0-9]{1,3}$'; then
+    break
 
 else
-break
+    print_error "Invalid domain or IP format"
 fi
 
 done
 
-print_success "Domain set: $DOMAIN_NAME"
+print_success "Host set: $DOMAIN_NAME"
 
 # ===============================
 # OS Detect
