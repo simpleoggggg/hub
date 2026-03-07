@@ -54,7 +54,7 @@ panel_menu() {
 
         case $p in
             1)  echo -e "  ${CYAN}➜ Executing Pterodactyl Routine...${NC}"
-                bash <(curl -s ) 
+                bash <(curl -s https://raw.githubusercontent.com/nobita329/hub/refs/heads/main/Codinghub/panel/pterodactyl/run.sh) 
                 pause ;;
             2)  echo -e "  ${CYAN}➜ Executing [] Routine...${NC}"
                 bash <(curl -s ) 
