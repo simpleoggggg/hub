@@ -47,7 +47,7 @@ echo -e "  ${C}NETWORK ROUTE DIAGNOSTICS${NC}"
 echo -e "  ${DG}├─ Public Endpoint :${NC} ${W}$IP${NC}"
 echo -e "  ${DG}├─ Local Gateway   :${NC} ${W}$LOCL_IP${NC}"
 echo -e "  ${DG}├─ Target Host     :${NC} ${W}$HOST${NC}"
-echo -e "  ${DG}└─ Security Level  :${NC} ${G}ENCRYPTED V-65S${NC}"
+echo -e "  ${DG}└─ Security Level  :${NC} ${G}SSH V-65S${NC}"
 echo -e "${DG}────────────────────────────────────────────────────────────${NC}"
 
 # --- AUTHENTICATION SEQUENCE ---
