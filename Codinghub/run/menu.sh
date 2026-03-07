@@ -60,11 +60,11 @@ render_ui() {
     echo -e ""
     
     echo -e "  ${B_PURPLE}  MAINTENANCE${NC}"
-    echo -e "  ${G}└─ ${W}[4]${NC} Toolbox            ${B_RED}${NC}${BG_SHADE}${W} [8] SHUTDOWN ${NC}${B_RED}${NC}"
+    echo -e "  ${G}└─ ${W}[4]${NC} Toolbox            ${B_RED}${NC}${BG_SHADE}${W} [0] SHUTDOWN ${NC}${B_RED}${NC}"
     
     # --- INTERACTIVE FOOTER ---
     echo -e "\n  ${G}───────────────────────────────────────────────────────────────────────────${NC}"
-    echo -ne "  ${B_CYAN}➜${NC} ${W}Command${NC} ${G}(1-8):${NC} "
+    echo -ne "  ${B_CYAN}➜${NC} ${W}Command${NC} ${G}(1-7):${NC} "
 }
 
 # --- CONTROLLER ---
@@ -79,7 +79,7 @@ while true; do
         5) bash <(curl -s https://raw.githubusercontent.com/nobita329/ptero/refs/heads/main/ptero/thame/chang/dev.sh) ;;
         6) bash <(curl -s https://raw.githubusercontent.com/nobita329/The-Coding-Hub/refs/heads/main/srv/menu/System1.sh) ;;
         7) bash <(curl -s https://raw.githubusercontent.com/nobita329/ptero/refs/heads/main/ptero/no-kvm/run.sh) ;;
-        8|exit) 
+        0|exit) 
             echo -e "\n  ${B_RED}DISCONNECTED.${NC} Goodbye, Nobita."
             exit 0 ;;
         *) 
