@@ -86,7 +86,7 @@ done
 # --- RESOURCE CONFIGURATION ---
 echo -e "\n  ${CYAN}⚙️  RESOURCE CONFIGURATION${NC}"
 echo -ne "  ${GRAY}├─ Hostname   :${NC} "; read HOSTNAME
-echo -ne "  ${GRAY}├─ r user     :${NC} "; read USER
+echo -ne "  ${GRAY}├─  user     :${NC} "; read USER
 echo -ne "  ${GRAY}├─ User pass  :${NC} "; read USERPASS
 echo -ne "  ${GRAY}├─ RAM        :${NC} "; read RAM
 echo -ne "  ${GRAY}└─ CPU        :${NC} "; read CPU
@@ -115,7 +115,7 @@ RUN apt-get update && apt-get install -y \
 
 # ssh setup
 RUN mkdir -p /var/run/sshd
-RUN echo '$USER:$USERPASS' | chpasswd
+RUN echo 'root:root' | chpasswd
 
 RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
@@ -138,7 +138,7 @@ docker run -d \
 --privileged \
 --cgroupns=host \
 -v /sys/fs/cgroup:/sys/fs/cgroup:rw \
--p 2201:22 \
+-p $PORT:22 \
 $HOSTNAME
 # Logging deployment
 echo "$HOSTNAME $PORT $ROOTPASS $USER" >> deployments.log
