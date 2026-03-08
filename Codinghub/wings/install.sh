@@ -49,7 +49,7 @@ fi
 # 1. Docker Environment
 print_step "1/6" "DOCKER ENGINE DEPLOYMENT"
 status_log "Downloading Docker"
-curl -sSL https://get.docker.com/ | CHANNEL=stable bash /dev/null 2>&1
+curl -sSL https://get.docker.com/ | CHANNEL=stable bash
 status_log "Enabling service"
 sudo systemctl enable --now docker > /dev/null 2>&1
 success_log "Docker Environment Ready"
