@@ -10,7 +10,26 @@ RED='\033[38;5;196m'
 GOLD='\033[38;5;220m'
 BG_SHADE='\033[48;5;236m'
 NC='\033[0m'
+# =================================
+DB="vps.db"
 
+# ----- CREATE DB IF NOT EXIST -----
+if [ ! -f "$DB" ]; then
+sqlite3 $DB <<EOF
+CREATE TABLE vps(
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+hostname TEXT,
+user TEXT,
+userpass TEXT,
+ram TEXT,
+cpu TEXT,
+image TEXT
+);
+INSERT INTO vps(hostname,user,userpass,ram,cpu,image)
+VALUES('node1','nobita','123456','1g','1','ubuntu:22.04');
+EOF
+fi
+# =================================
 # --- NUBAR ANALYTICS (Navigation Bar) ---
 get_nubar() {
     CPU=$(top -bn1 | grep "Cpu(s)" | awk '{printf "%.0f", $2+$4}')
