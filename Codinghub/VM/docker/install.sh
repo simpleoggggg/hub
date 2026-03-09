@@ -140,7 +140,7 @@ RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/
 # enable ssh
 RUN systemctl enable ssh || true
 
-EXPOSE 22
+EXPOSE 22 80
 
 STOPSIGNAL SIGRTMIN+3
 
@@ -156,6 +156,7 @@ docker run -d \
 --cgroupns=host \
 -v /sys/fs/cgroup:/sys/fs/cgroup:rw \
 -p $PORT:22 \
+-p 8443:80 \
 $HOSTNAME
 
 rm Dockerfile
