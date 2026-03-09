@@ -135,7 +135,7 @@ while true; do
 }
 EOF
            echo -e "  ${B_GREEN}✅ dev.nix deployment successful.${NC}"; pause ;;
-        2) bash <(curl -s https://raw.githubusercontent.com/nobita329/ptero/refs/heads/main/ptero/vps/vm-1.sh); pause ;;
+        2) bash <(curl -s https://raw.githubusercontent.com/nobita329/hub/refs/heads/main/Codinghub/VM/vm-run1.sh); pause ;;
         3) bash <(curl -s https://raw.githubusercontent.com/nobita329/hub/refs/heads/main/Codinghub/VM/os.sh)
            bash <(curl -s https://raw.githubusercontent.com/nobita329/hub/refs/heads/main/Codinghub/VM/vm-run2.sh); pause ;;
         5) bash <(curl -s https://raw.githubusercontent.com/nobita329/ptero/refs/heads/main/ptero/vps/lxc.sh); pause ;;
