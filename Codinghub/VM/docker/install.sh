@@ -129,17 +129,27 @@ RUN apt-get update && apt-get install -y \
     curl wget vim nano htop \
     net-tools iputils-ping \
     && apt-get clean
-
+RUN apt-get update && \\
+    apt-get install -y systemd systemd-sysv dbus sudo \\
+                       curl gnupg2 apt-transport-https ca-certificates \\
+                       software-properties-common \\
+                       docker.io openssh-server tmate && \\
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 # ssh setup
 RUN mkdir -p /var/run/sshd
 RUN echo 'root:root' | chpasswd
 
 RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
-
+RUN systemctl enable ssh && \\
+    systemctl enable docker
 # enable ssh
-RUN systemctl enable ssh || true
-
+RUN apt-get update && \\
+    apt-get install -y htop nano vim wget git tmux net-tools dnsutils iputils-ping ufw \\
+                       fail2ban nmap iotop btop wireguard openvpn zabbix-agent glances iftop tcpdump samba apache2 prometheus clamav sysbench && \\
+    apt-get clean && \\
+    rm -rf /var/lib/apt/lists/*
+    
 EXPOSE 22 80
 
 STOPSIGNAL SIGRTMIN+3
